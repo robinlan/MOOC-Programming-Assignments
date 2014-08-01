@@ -1,0 +1,1173 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+using namespace std;
+const int  WARRIOR_NUM = 5;
+
+int	RedWarriorNo[250] = {0}; 
+int RedWarriorKindNo[250] = {0};
+int RedWarriorLifeValue[250] = {0};
+int RedWarriorForce[250] = {0}; 
+int RedDragonNum[250] = {0}; 
+int RedNinjaNum[250] = {0}; 
+int RedIcemanNum[250] = {0}; 
+int RedLionNum[250] = {0}; 
+int RedWolfNum[250] = {0};
+int RedWeapon1[250] = {-1};
+int RedWeapon2[250] = {-1};
+int RedWeapon1Force[250] = {0};
+int RedWeapon2Force[250] = {0}; 
+int BlueWarriorNo[250] = {0};
+int BlueWarriorKindNo[250] = {0};
+int BlueWarriorLifeValue[250] = {0};
+int BlueWarriorForce[250] = {0}; 
+int BlueDragonNum[250] = {0}; 
+int BlueNinjaNum[250] = {0}; 
+int BlueIcemanNum[250] = {0}; 
+int BlueLionNum[250] = {0}; 
+int BlueWolfNum[250] = {0};
+int BlueWeapon1[250] = {-1}; 
+int BlueWeapon2[250] = {-1};
+int BlueWeapon1Force[250] = {0}; 
+int BlueWeapon2Force[250] = {0};
+int CurCityWarriorNum[250] = {0};
+int CurCityLifeValue[250] = {0}; 
+
+void update(){
+    for(int i=0;i<250;i++)RedWarriorNo[i] = {0}; 
+    for(int i=0;i<250;i++)RedWarriorKindNo[i] = {0};
+    for(int i=0;i<250;i++)RedDragonNum[i] = {0}; 
+    for(int i=0;i<250;i++)RedNinjaNum[i] = {0}; 
+    for(int i=0;i<250;i++)RedIcemanNum[i] = {0}; 
+    for(int i=0;i<250;i++)RedLionNum[i] = {0}; 
+    for(int i=0;i<250;i++)RedWolfNum[i] = {0};
+    for(int i=0;i<250;i++)RedWeapon1[i] = {-1};
+    for(int i=0;i<250;i++)RedWeapon2[i] = {-1}; 
+    for(int i=0;i<250;i++)RedWeapon1Force[i] = {0};
+    for(int i=0;i<250;i++)RedWeapon2Force[i] = {0}; 
+    for(int i=0;i<250;i++)BlueWarriorNo[i] = {0};
+    for(int i=0;i<250;i++)BlueWarriorKindNo[i] = {0}; 
+    for(int i=0;i<250;i++)BlueDragonNum[i] = {0}; 
+    for(int i=0;i<250;i++)BlueNinjaNum[i] = {0}; 
+    for(int i=0;i<250;i++)BlueIcemanNum[i] = {0}; 
+    for(int i=0;i<250;i++)BlueLionNum[i] = {0}; 
+    for(int i=0;i<250;i++)BlueWolfNum[i] = {0};
+    for(int i=0;i<250;i++)BlueWeapon1[i] = {-1}; 
+    for(int i=0;i<250;i++)BlueWeapon2[i] = {-1};
+    for(int i=0;i<250;i++)BlueWeapon1Force[i] = {0}; 
+    for(int i=0;i<250;i++)BlueWeapon2Force[i] = {0};
+    for(int i=0;i<250;i++)CurCityWarriorNum[i] = {0};   
+}
+
+class City
+{
+    public:
+        int num;//城市編號
+        int flag;//城市旗幟
+        int LifeValue;//城市生命元 
+        string GetFlag(); //返回旗幟顏色
+    //紅武士資訊 
+        int RedWarriorNo,RedWarriorKindNo,RedDragonNum,RedNinjaNum,RedIcemanNum,RedLionNum,RedWolfNum; 
+        int BlueWarriorNo,BlueWarriorKindNo,BlueDragonNum,BlueNinjaNum,BlueIcemanNum,BlueLionNum,BlueWolfNum; 
+        void Init(int flag_,int N); //初始化
+        void ValueMade(); 
+        void RedUpgrade(int RedWarriorNo_,int RedWarriorKindNo_,int RedDragonNum_,int RedNinjaNum_,int RedIcemanNum_,int RedLionNum_,int RedWolfNum_);//更新目前武士資訊(編號、種類、種類內編號)
+        void BlueUpgrade(int BlueWarriorNo_,int BlueWarriorKindNo_,int BlueDragonNum_,int BlueNinjaNum_,int BlueIcemanNum_,int BlueLionNum_,int BlueWolfNum_);
+}; 
+class Headquarter;
+class Warrior
+{
+public:
+		Headquarter * pHeadquarter;
+		int kindNo;
+		int no;
+		static string names[WARRIOR_NUM];
+		static int initialLifeValue [WARRIOR_NUM];
+		int LifeValue;//武士可變生命值
+		Warrior( Headquarter * p,int no_,int kindNo_,int HqColor_,int N_ ); 
+		void PrintResult(int nTime,int F,int R);//F是武士攻擊力 
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+		void GetWeapon1(int weapon_,int WarriorForce_,int ArrowForce_);//出生之後緊接著使用 
+        void GetWeapon2(int weapon_,int WarriorForce_,int ArrowForce_);//force_可為武士威力或弓箭威力(R) 
+		void Weap1ForceChange(int weapon_,int WeapUsedtime_);//每經過一次攻擊就使用 
+        void Weap2ForceChange(int weapon_,int WeapUsedtime_); 
+        bool dead(){
+             if(initialLifeValue [kindNo]<=0)return true;
+             else 
+             return false; 
+        } 
+        static int force [WARRIOR_NUM];//武士攻擊力 
+        int WarriorForce;//可變攻擊力 
+        int EnergyForce;//敵人戰力,在城市有兩人時登入 
+		int weapon1;
+		int Weapon1Force;
+        int weapon2; 
+        int Weapon2Force;
+        int Weap1UsedTime;//武器使用次數 
+        int Weap2UsedTime;
+        int step;//行走步數 
+        int HqColor;//所屬陣營顏色 
+        int CurCityNum;//所在城市 
+//        virtual void Forward(){}//武士前進,在其中呼叫City::Upgrade 
+//        virtual void Shoot(Warrior * p){}//武士射箭
+//        virtual void Explode(Warrior * p){}//武士自爆
+        virtual void Fight(Warrior * p){} 
+        virtual void Hurted(int EnermyForce){} 
+        virtual void FightBack(Warrior * p){} 
+//		void SetInfo(Headquarter * p,int no_,int kindNo_);
+};
+class Dragon:public Warrior
+{
+public:
+        float morale;//士氣   
+        int DragonNo;              
+        Dragon(Headquarter * p,int no_,int kindNo_,int HqColor_,int N_):Warrior(p,no_,kindNo_,HqColor_,N_){
+//                           morale = (float)p -> totalLifeValue / p -> initialLifeValue[kindNo];
+                           weapon1 = no%3; 
+        }
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               }   
+               else{return "no";} 
+        } 
+        void PrintResult(int nTime,int F,int R){
+             Warrior::PrintResult(nTime,F,R);
+             Warrior::GetWeapon1(weapon1,F,R); 
+             cout<<"It has a "<<GetWeapName(weapon1);printf(",and it's morale is %.2f\n",morale); 
+        }
+//        virtual void Forward();
+        virtual void Shoot(Warrior * p);//武士射箭
+        virtual void Explode(Warrior * p);//武士自爆
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+        virtual void Fight(Warrior * p);
+        virtual void Hurted(int EnermyForce);
+        virtual void FightBack(Warrior * p);
+};
+void Dragon::Fight(Warrior * p){
+     p -> Hurted(WarriorForce+Weapon1Force);
+     p -> FightBack(this); 
+     cout<<"Dragon fight!"<<endl;
+     if(p -> LifeValue <= 0){morale = morale + 0.2;cout<<"morale up!!"<<endl;}
+     else{morale = morale - 0.2;cout<<"morale drop!!"<<endl;} 
+     if(LifeValue && morale > 0.8){cout<<"Dragon roar!!"<<endl;} 
+} 
+void Dragon::Hurted(int EnermyForce){
+     LifeValue -= EnermyForce; 
+     cout<<"Dragon hurts!"<<endl; 
+} 
+void Dragon::FightBack(Warrior * p){
+     if(weapon1 == 0)p -> Hurted(WarriorForce/2+Weapon1Force);
+     else
+     p -> Hurted(WarriorForce/2); 
+     cout<<"Dragon fightback!"<<endl; 
+} 
+void Dragon::Shoot(Warrior * p){
+     
+}
+void Dragon::Explode(Warrior * p){
+     
+}
+class Ninja:public Warrior
+{
+	public:
+        int NinjaNo;   
+        Ninja(Headquarter * p,int no_,int kindNo_,int HqColor_,int N_):Warrior(p,no_,kindNo_,HqColor_,N_){
+                          weapon1 = no%3; 
+                          weapon2 = (no+1)%3; 
+        } 
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               }   
+               else{return "no";} 
+        } 
+        void PrintResult(int nTime,int F,int R){
+             Warrior::PrintResult(nTime,F,R);
+             Warrior::GetWeapon1(weapon1,F,R);
+             Warrior::GetWeapon2(weapon2,F,R);
+             cout<<"It has a "<<GetWeapName(weapon1)<<" and a "<<GetWeapName(weapon2)<<endl; 
+        }
+//        virtual void Forward();
+        virtual void Shoot(Warrior * p);//武士射箭
+        virtual void Explode(Warrior * p);//武士自爆
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+        virtual void Fight(Warrior * p);
+        virtual void Hurted(int EnermyForce);
+        virtual void FightBack(Warrior * p);
+};
+void Ninja::Fight(Warrior * p){
+     p -> Hurted(WarriorForce+Weapon1Force);
+     p -> FightBack(this); 
+     cout<<"Ninja fight!"<<endl; 
+} 
+void Ninja::Hurted(int EnermyForce){
+     LifeValue -= EnermyForce; 
+     cout<<"Ninja hurts!"<<endl; 
+} 
+void Ninja::FightBack(Warrior * p){
+     /*if(weapon1 == 0)p -> Hurted(WarriorForce/2+Weapon1Force);
+     else
+     p -> Hurted(WarriorForce/2); 
+     cout<<"Ninja fightback!"<<endl;*/ 
+} //Ninja不反擊 
+void Ninja::Shoot(Warrior * p){
+     
+}
+void Ninja::Explode(Warrior * p){
+     
+}
+class Iceman:public Warrior
+{
+	public: 
+        int IcemanNo;  
+        int step;//武士前進步數   
+        Iceman(Headquarter * p,int no_,int kindNo_,int HqColor_,int N_):Warrior(p,no_,kindNo_,HqColor_,N_){
+                           weapon1 = no%3;
+                           step = 0; 
+        }
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else{return "no";} 
+        } 
+        void PrintResult(int nTime,int F,int R){
+             Warrior::PrintResult(nTime,F,R);
+             Warrior::GetWeapon1(weapon1,F,R);
+             cout<<"It has a "<<GetWeapName(weapon1)<<endl; 
+        }
+        void LifeDropForceUp(int step_); 
+//        virtual void Forward();
+        virtual void Shoot(Warrior * p);//武士射箭
+        virtual void Explode(Warrior * p);//武士自爆
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+        virtual void Fight(Warrior * p);
+        virtual void Hurted(int EnermyForce); 
+        virtual void FightBack(Warrior * p);
+};
+void Iceman::LifeDropForceUp(int step_){
+     if(step_%2 == 0){
+           if(LifeValue > 9){LifeValue -= 9;cout<<HqColor<<" Iceman "<<no<<" 's life drop,force up!!"<<endl;} 
+           else{LifeValue = 1;} 
+           WarriorForce = WarriorForce + 20;      
+     }
+     else{} 
+} 
+void Iceman::Fight(Warrior * p){
+     p -> Hurted(WarriorForce+Weapon1Force);
+     p -> FightBack(this); 
+     cout<<"Iceman fight!"<<endl; 
+} 
+void Iceman::Hurted(int EnermyForce){
+     LifeValue -= EnermyForce; 
+     cout<<"Iceman hurts!"<<endl; 
+} 
+void Iceman::FightBack(Warrior * p){
+     if(weapon1 == 0)p -> Hurted(WarriorForce/2+Weapon1Force);
+     else
+     p -> Hurted(WarriorForce/2); 
+     cout<<"Iceman fightback!"<<endl; 
+} 
+void Iceman::Shoot(Warrior * p){
+     
+}
+void Iceman::Explode(Warrior * p){
+     
+}
+class Lion:public Warrior
+{
+	public:
+        float loyalty;//忠誠度 
+        int LionNo;
+        int tmp;//記錄死亡前生命值 
+        int K;//忠誠度降低值 
+        Lion(Headquarter * p,int no_,int kindNo_,int HqColor_,int N_):Warrior(p,no_,kindNo_,HqColor_,N_){
+//                         loyalty = p -> totalLifeValue;
+        }
+        void PrintResult(int nTime,int F,int R){
+             Warrior::PrintResult(nTime,F,R);
+             printf("It's loyalty is %.0f\n",loyalty); 
+        } 
+        bool disappear(){
+             if(loyalty <= 0)return true;
+             else{return false;} 
+        } 
+//        virtual void Forward();
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+        virtual void Fight(Warrior * p);//進行生命值轉移,使用到dead() 
+        virtual void Hurted(int EnermyForce);
+        virtual void FightBack(Warrior * p);
+};
+void Lion::Fight(Warrior * p){
+	 tmp = LifeValue ;
+     if(!disappear()){ 
+           p -> Hurted(WarriorForce+Weapon1Force);
+           p -> FightBack(this); 
+           cout<<"Lion fight!"<<endl; 
+           if(EnergyForce > 0){
+                 loyalty = loyalty - K;
+                 if(loyalty <= 0){
+                       cout<<"Lion escape!!"<<endl;
+                 } 
+           } 
+     } 
+     else{}
+} 
+void Lion::Hurted(int EnermyForce){
+     LifeValue -= EnermyForce;
+     cout<<"Lion hurts!"<<endl;
+} 
+void Lion::FightBack(Warrior * p){
+	 if(dead()){
+           p -> LifeValue += tmp; 
+           cout<<"Life change!"<<endl;
+     }  //生命值轉移 
+     if(weapon1 == 0)p -> Hurted(WarriorForce/2+Weapon1Force);
+     else
+     p -> Hurted(WarriorForce/2); 
+     cout<<"Lion fightback!"<<endl; 
+} 
+class Wolf:public Warrior
+{
+	public:
+        int WolfNo;   
+        Wolf(Headquarter * p,int no_,int kindNo_,int HqColor_,int N_):Warrior(p,no_,kindNo_,HqColor_,N_){}
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else {}  
+        } 
+        void PrintResult(int nTime,int F,int R){Warrior::PrintResult(nTime,F,R);}
+//        virtual void Forward();
+        virtual void Shoot(Warrior * p);//武士射箭
+        virtual void Explode(Warrior * p);//武士自爆
+//        void Die(){}//武士死亡
+//        void Arrived(){}//武士抵達別人陣營 
+        virtual void Fight(Warrior * p);
+        virtual void Hurted(int EnermyForce);
+        virtual void FightBack(Warrior * p);
+};
+void Wolf::Fight(Warrior * p){
+     p -> Hurted(WarriorForce+Weapon1Force);
+     p -> FightBack(this); 
+     cout<<"Wolf fight!"<<endl;
+     if(p -> LifeValue <= 0 && p -> weapon1 != weapon1 && p -> weapon2 != weapon1 &&  p -> weapon1 != -1 ){
+          weapon1 = p -> weapon1;
+	      Weapon1Force = p -> Weapon1Force;
+          Weap1UsedTime = p -> Weap1UsedTime;//武器使用次數 
+          cout<<"wolf get weapon1!!"<<endl; 
+     }//得到敵人武器 
+     else if(p -> LifeValue <= 0 && p -> weapon1 != weapon2 && p -> weapon2 != weapon2 && p -> weapon2 != -1){
+          weapon2 = p -> weapon2;
+	      Weapon2Force = p -> Weapon2Force;
+          Weap2UsedTime = p -> Weap2UsedTime;//武器使用次數 
+          cout<<"wolf get weapon2!!"<<endl; 
+     }
+     else{}//得到敵人武器  
+           
+} 
+void Wolf::Hurted(int EnermyForce){
+     LifeValue -= EnermyForce; 
+     cout<<"Wolf hurts!"<<endl; 
+} 
+void Wolf::FightBack(Warrior * p){
+     if(weapon1 == 0)p -> Hurted(WarriorForce+Weapon1Force);
+     else
+     p -> Hurted(WarriorForce/2); 
+     cout<<"Wolf fightback!"<<endl; 
+} 
+void Wolf::Shoot(Warrior * p){
+     
+}
+void Wolf::Explode(Warrior * p){
+     
+}
+class Headquarter
+{
+	private:
+		bool stopped;
+        int totalDragonNum; 
+		int totalNinjaNum; 
+		int totalIcemanNum; 
+		int totalLionNum; 
+		int totalWolfNum;
+		int color;
+		int curMakingSeqIdx; 
+		int warriorNum[WARRIOR_NUM]; 
+        Dragon * pDragon[200];
+        Iceman * pIceman[200];
+        Ninja * pNinja[200];
+        Lion * pLion[200];
+        Wolf * pWolf[200];
+	public:
+		Warrior * pWarriors[1000];
+        City * pCity[250];
+        int totalLifeValue;
+        int totalWarriorNum;
+		int totalCityNum;
+        int EnermyNum;//敵人數量
+        int CityWarriorNum[250];
+		friend class Warrior;
+		friend class Dragon;
+		friend class Iceman;
+		friend class Lion;
+		friend class Wolf;
+		friend class Ninja;
+		static int makingSeq[2][WARRIOR_NUM]; 
+		void Init(int color_, int lv,int N);
+        void CityInit(City * c);
+        void GetLifeValue(int n/*城市編號-1*/);
+		~Headquarter () ;
+		int Produce(int nTime,int R);
+		string GetColor();
+		int RedForward(int N);//紅武士前進 
+        int BlueForward();//藍武士前進 
+        bool occupied();//是否被占領
+};
+string City::GetFlag(){
+     if(flag == 0)return "red";
+     else if (flag == 1)return "blue";
+     else 
+     return "no!!";  
+} 
+void City::Init(int flag_,int N){
+     flag = flag_%2;
+     num = N; 
+     LifeValue = 0; 
+}
+void City::ValueMade(){
+     LifeValue = LifeValue + 10;
+     cout<<"The city has had up to "<<LifeValue<<" lifevalue!!"<<endl; 
+} 
+void City::RedUpgrade(int RedWarriorNo_,int RedWarriorKindNo_,int RedDragonNum_,int RedNinjaNum_,int RedIcemanNum_,int RedLionNum_,int RedWolfNum_){
+     RedWarriorNo = RedWarriorNo_; 
+     RedWarriorKindNo = RedWarriorKindNo_; 
+     RedDragonNum = RedDragonNum_; 
+     RedNinjaNum = RedNinjaNum_; 
+     RedIcemanNum = RedIcemanNum_; 
+     RedLionNum = RedLionNum_; 
+     RedWolfNum= RedWolfNum_; 
+} 
+void City::BlueUpgrade(int BlueWarriorNo_,int BlueWarriorKindNo_,int BlueDragonNum_,int BlueNinjaNum_,int BlueIcemanNum_,int BlueLionNum_,int BlueWolfNum_){
+     BlueWarriorNo = BlueWarriorNo_; 
+     BlueWarriorKindNo = BlueWarriorKindNo_; 
+     BlueDragonNum = BlueDragonNum_; 
+     BlueNinjaNum = BlueNinjaNum_; 
+     BlueIcemanNum = BlueIcemanNum_; 
+     BlueLionNum = BlueLionNum_; 
+     BlueWolfNum = BlueWolfNum_; 
+} 
+Warrior::Warrior( Headquarter * p,int no_,int kindNo_,int HqColor_,int N_ ) {
+	no = no_;
+	kindNo = kindNo_;
+	pHeadquarter = p;
+	WarriorForce = force[kindNo]; 
+	weapon1 = -1;
+	Weapon1Force = 0;
+    weapon2 = -1; 
+    Weapon2Force = 0;
+    Weap1UsedTime = 0;//武器使用次數 
+    Weap2UsedTime = 0;
+    HqColor = HqColor_;
+    if(HqColor == 0)CurCityNum = 0;
+    else if(HqColor == 1)CurCityNum = N_+1; 
+    LifeValue = initialLifeValue[kindNo];
+}
+void Warrior::GetWeapon1(int weapon_,int WarriorForce_,int ArrowForce_)
+{
+     if(weapon_ == 0){Weapon1Force = WarriorForce_*0.2;}
+     else if(weapon_ == 2){Weapon1Force = ArrowForce_;}
+     else{} 
+     cout<<"It gets weapon "<<weapon_<<" with force "<<Weapon1Force<<endl; 
+}
+void Warrior::GetWeapon2(int weapon_,int WarriorForce_,int ArrowForce_)
+{
+     if(weapon_ == 0){Weapon2Force = WarriorForce_*0.2;}
+     else if(weapon_ == 2){Weapon2Force = ArrowForce_;}
+     else{} 
+     cout<<"It gets weapon "<<weapon_<<" with force "<<Weapon2Force<<endl; 
+}
+void Warrior::Weap1ForceChange(int weapon_,int WeapUsedtime_) 
+{
+     if(weapon_ == 0 && WeapUsedtime_>Weap1UsedTime){
+                Weapon1Force = Weapon1Force*0.8;
+                cout<<"It has only force "<<Weapon1Force<<endl;
+                if(Weapon1Force<1)cout<<"The sword can't be used!"<<endl; 
+     }
+     else if(weapon_ == 2 && WeapUsedtime_>Weap1UsedTime){ 
+          Weap1UsedTime++;
+          if(Weap1UsedTime>3){Weapon1Force = 0;cout<<"The arrow can't be used!"<<endl;} 
+          cout<<"It has been used "<<Weap1UsedTime<<endl; 
+     }
+     else{} 
+} 
+void Warrior::Weap2ForceChange(int weapon_,int WeapUsedtime_) 
+{
+     if(weapon_ == 0 && WeapUsedtime_>Weap2UsedTime){
+                Weapon2Force = Weapon2Force*0.8;
+                cout<<"It has only force "<<Weapon2Force<<endl;
+                if(Weapon2Force<1)cout<<"The sword can't be used!"<<endl; 
+     }
+     else if(weapon_ == 2 && WeapUsedtime_>Weap2UsedTime){ 
+          Weap2UsedTime++;
+          if(Weap2UsedTime>3){Weapon2Force = 0;cout<<"The arrow can't be used!"<<endl;} 
+          cout<<"It has been used "<<Weap2UsedTime<<" times!"<<endl; 
+     }
+     else{} 
+} 
+
+/*void Warrior::SetInfo(Headquarter * p,int no_,int kindNo_){
+	no = no_;
+	kindNo = kindNo_;
+	pHeadquarter = p;
+} */
+void Warrior::PrintResult(int nTime,int F,int R)
+{
+		string color =  pHeadquarter->GetColor();
+		printf("%03d %s %s %d born with strength %d,%d %s in %s headquarter\n"	,
+				nTime, color.c_str(), names[kindNo].c_str(), no, initialLifeValue[kindNo],
+				pHeadquarter->warriorNum[kindNo],names[kindNo].c_str(),color.c_str());
+//		cout<<color<<":"<<names[0]<<","<<names[1]<<","<<names[2]<<","<<names[3]<<","<<names[4]<<endl;
+}
+void Headquarter::Init(int color_, int lv,int N)
+{
+	color = color_;
+	totalLifeValue = lv;
+	totalWarriorNum = 0;
+	totalCityNum = N;
+	stopped = false;
+	curMakingSeqIdx = 0;
+	for( int i = 0;i < WARRIOR_NUM;i ++ )
+		warriorNum[i] = 0;
+	EnermyNum = 0; 
+	for(int i=0;i<250;i++)CityWarriorNum[i] = {0};
+}
+int Headquarter::RedForward(int N){
+	int tmp = 1;
+    for(int i1=0;i1<totalDragonNum;i1++){
+          if(pDragon[i1] -> CurCityNum >= N){       
+              cout<<"Blue quarter has been taken!!"<<endl; 
+              if(pDragon[i1] -> CurCityNum == N){
+                             pDragon[i1] -> CurCityNum ++;
+                             CurCityWarriorNum[pDragon[i1] -> CurCityNum-2]--; 
+                             CurCityWarriorNum[pDragon[i1] -> CurCityNum-1]++;
+                             CityWarriorNum[pDragon[i1] -> CurCityNum-2]--; 
+                             CityWarriorNum[pDragon[i1] -> CurCityNum-1]++;
+              }
+              EnermyNum ++; 
+              tmp = 0; 
+          }
+          else{
+//                pCity[pDragon[i1] -> CurCityNum] -> RedUpgrade(pDragon[i1] -> no,pDragon[i1] -> kindNo,1,0,0,0,0); 
+                pDragon[i1] -> CurCityNum ++; 
+                cout<<"Red Dragon forward to city "<<pDragon[i1] -> CurCityNum<<endl; 
+                RedWarriorNo[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> no;
+                RedWarriorKindNo[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> kindNo; 
+                RedWarriorLifeValue[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> LifeValue;
+                RedWarriorForce[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> WarriorForce; 
+                RedDragonNum[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> DragonNo;
+                RedNinjaNum[pDragon[i1] -> CurCityNum-1] = 0;
+                RedIcemanNum[pDragon[i1] -> CurCityNum-1] = 0;
+                RedLionNum[pDragon[i1] -> CurCityNum-1] = 0;
+                RedWolfNum[pDragon[i1] -> CurCityNum-1] = 0;
+                RedWeapon1[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> weapon1;
+                RedWeapon1Force[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> Weapon1Force;
+                RedWeapon2[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> weapon2;
+                RedWeapon2Force[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> Weapon2Force;
+                CurCityWarriorNum[pDragon[i1] -> CurCityNum-2]--; 
+                CurCityWarriorNum[pDragon[i1] -> CurCityNum-1]++;
+                CityWarriorNum[pDragon[i1] -> CurCityNum-2]--;
+                CityWarriorNum[pDragon[i1] -> CurCityNum-1]++;  
+//                return 1;
+          } 
+    } 
+    for(int i2=0;i2<totalNinjaNum;i2++){
+          if(pNinja[i2] -> CurCityNum >= N){        
+              cout<<"Blue quarter has been taken!!"<<endl;
+              if(pNinja[i2] -> CurCityNum == N){
+                            pNinja[i2] -> CurCityNum ++;
+                            CurCityWarriorNum[pNinja[i2] -> CurCityNum-2]--; 
+                            CurCityWarriorNum[pNinja[i2] -> CurCityNum-1]++; 
+                            CityWarriorNum[pNinja[i2] -> CurCityNum-2]--; 
+                            CityWarriorNum[pNinja[i2] -> CurCityNum-1]++;
+              }
+              EnermyNum ++; 
+              tmp = 0; 
+          }   
+          else{ 
+//              pCity[pNinja[i2] -> CurCityNum] -> RedUpgrade(pNinja[i2] -> no,pNinja[i2] -> kindNo,0,1,0,0,0);  
+              pNinja[i2] -> CurCityNum ++;
+              cout<<"Red Ninja forward to city "<<pNinja[i2] -> CurCityNum<<endl; 
+              RedWarriorNo[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> no;
+              RedWarriorKindNo[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> kindNo; 
+              RedWarriorLifeValue[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> LifeValue;
+              RedWarriorForce[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> WarriorForce;  
+              RedDragonNum[pNinja[i2] -> CurCityNum-1] = 0;
+              RedNinjaNum[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> NinjaNo;
+              RedIcemanNum[pNinja[i2] -> CurCityNum-1] = 0;
+              RedLionNum[pNinja[i2] -> CurCityNum-1] = 0;
+              RedWolfNum[pNinja[i2] -> CurCityNum-1] = 0; 
+              RedWeapon1[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> weapon1;
+              RedWeapon1Force[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> Weapon1Force;
+              RedWeapon2[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> weapon2;
+              RedWeapon2Force[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> Weapon2Force;
+              CurCityWarriorNum[pNinja[i2] -> CurCityNum-2]--; 
+              CurCityWarriorNum[pNinja[i2] -> CurCityNum-1]++; 
+              CityWarriorNum[pNinja[i2] -> CurCityNum-2]--; 
+              CityWarriorNum[pNinja[i2] -> CurCityNum-1]++;  
+//              return 1;
+          }  
+    }
+    for(int i3=0;i3<totalIcemanNum;i3++){
+          if(pIceman[i3] -> CurCityNum >= N){       
+              cout<<"Blue quarter has been taken!!"<<endl;
+              if(pIceman[i3] -> CurCityNum == N){
+                             pIceman[i3] -> CurCityNum ++;
+                             CurCityWarriorNum[pIceman[i3] -> CurCityNum-2]--; 
+                             CurCityWarriorNum[pIceman[i3] -> CurCityNum-1]++;   
+                             CityWarriorNum[pIceman[i3] -> CurCityNum-2]--; 
+                             CityWarriorNum[pIceman[i3] -> CurCityNum-1]++;
+              }
+              EnermyNum ++; 
+              tmp = 0;
+          }   
+          else{ 
+//              pCity[pIceman[i3] -> CurCityNum] -> RedUpgrade(pIceman[i3] -> no,pIceman[i3] -> kindNo,0,0,1,0,0);  
+              pIceman[i3] -> CurCityNum ++;
+              pIceman[i3] -> step ++; 
+              pIceman[i3] -> LifeDropForceUp(pIceman[i3] -> step);
+              cout<<"Red Iceman forward to city "<<pIceman[i3] -> CurCityNum<<endl;
+              RedWarriorNo[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> no;
+              RedWarriorKindNo[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> kindNo; 
+              RedWarriorLifeValue[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> LifeValue;
+              RedWarriorForce[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> WarriorForce;  
+              RedDragonNum[pIceman[i3] -> CurCityNum-1] = 0;
+              RedNinjaNum[pIceman[i3] -> CurCityNum-1] = 0;
+              RedIcemanNum[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> IcemanNo;
+              RedLionNum[pIceman[i3] -> CurCityNum-1] = 0;
+              RedWolfNum[pIceman[i3] -> CurCityNum-1] = 0; 
+              RedWeapon1[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> weapon1;
+              RedWeapon1Force[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> Weapon1Force;
+              RedWeapon2[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> weapon2;
+              RedWeapon2Force[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> Weapon2Force;
+              CurCityWarriorNum[pIceman[i3] -> CurCityNum-2]--; 
+              CurCityWarriorNum[pIceman[i3] -> CurCityNum-1]++;   
+              CityWarriorNum[pIceman[i3] -> CurCityNum-2]--; 
+              CityWarriorNum[pIceman[i3] -> CurCityNum-1]++;
+//              return 1;
+          } 
+    }
+    for(int i4=0;i4<totalLionNum;i4++){
+          if(pLion[i4] -> CurCityNum >= N){
+              cout<<"Blue quarter has been taken!!"<<endl; 
+              if(pLion[i4] -> CurCityNum == N){
+                           pLion[i4] -> CurCityNum ++;
+                           CurCityWarriorNum[pLion[i4] -> CurCityNum-2]--; 
+                           CurCityWarriorNum[pLion[i4] -> CurCityNum-1]++;
+                           CityWarriorNum[pLion[i4] -> CurCityNum-2]--; 
+                           CityWarriorNum[pLion[i4] -> CurCityNum-1]++;
+              } 
+              EnermyNum ++; 
+              tmp = 0;        
+          }   
+          else{ 
+//              pCity[pLion[i4] -> CurCityNum] -> RedUpgrade(pLion[i4] -> no,pLion[i4] -> kindNo,0,0,0,1,0);
+              pLion[i4] -> CurCityNum ++;
+              cout<<"Red Lion forward to city "<<pLion[i4] -> CurCityNum<<endl;
+              RedWarriorNo[pLion[i4] -> CurCityNum-1] = pLion[i4] -> no;
+              RedWarriorKindNo[pLion[i4] -> CurCityNum-1] = pLion[i4] -> kindNo; 
+              RedWarriorLifeValue[pLion[i4] -> CurCityNum-1] = pLion[i4] -> LifeValue;
+              RedWarriorForce[pLion[i4] -> CurCityNum-1] = pLion[i4] -> WarriorForce;
+              RedDragonNum[pLion[i4] -> CurCityNum-1] = 0;
+              RedNinjaNum[pLion[i4] -> CurCityNum-1] = 0;
+              RedIcemanNum[pLion[i4] -> CurCityNum-1] = 0;
+              RedLionNum[pLion[i4] -> CurCityNum-1] = pLion[i4] -> LionNo;
+              RedWolfNum[pLion[i4] -> CurCityNum-1] = 0;
+              RedWeapon1[pLion[i4] -> CurCityNum-1] = pLion[i4] -> weapon1;
+              RedWeapon1Force[pLion[i4] -> CurCityNum-1] = pLion[i4] -> Weapon1Force;
+              RedWeapon2[pLion[i4] -> CurCityNum-1] = pLion[i4] -> weapon2;
+              RedWeapon2Force[pLion[i4] -> CurCityNum-1] = pLion[i4] -> Weapon2Force;
+              CurCityWarriorNum[pLion[i4] -> CurCityNum-2]--; 
+              CurCityWarriorNum[pLion[i4] -> CurCityNum-1]++;
+              CityWarriorNum[pLion[i4] -> CurCityNum-2]--; 
+              CityWarriorNum[pLion[i4] -> CurCityNum-1]++; 
+//              return 1; 
+          }  
+    }
+    for(int i5=0;i5<totalWolfNum;i5++){
+          if(pWolf[i5] -> CurCityNum >= N){       
+              cout<<"Blue quarter has been taken!!"<<endl; 
+              if(pWolf[i5] -> CurCityNum == N){
+                           pWolf[i5] -> CurCityNum ++;
+                           CurCityWarriorNum[pWolf[i5] -> CurCityNum-2]--; 
+                           CurCityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+                           CityWarriorNum[pWolf[i5] -> CurCityNum-2]--; 
+                           CityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+              } 
+              EnermyNum ++; 
+              tmp = 0; 
+          }   
+          else{ 
+//              pCity[pWolf[i5] -> CurCityNum] -> RedUpgrade(pWolf[i5] -> no,pWolf[i5] -> kindNo,0,0,0,0,1);  
+              pWolf[i5] -> CurCityNum ++;  
+              cout<<"Red Wolf forward to city "<<pWolf[i5] -> CurCityNum<<endl; 
+              RedWarriorNo[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> no;
+              RedWarriorKindNo[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> kindNo; 
+              RedWarriorLifeValue[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> LifeValue; 
+              RedWarriorForce[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> WarriorForce;
+              RedDragonNum[pWolf[i5] -> CurCityNum-1] = 0;
+              RedNinjaNum[pWolf[i5] -> CurCityNum-1] = 0;
+              RedIcemanNum[pWolf[i5] -> CurCityNum-1] = 0;
+              RedLionNum[pWolf[i5] -> CurCityNum-1] = 0;
+              RedWolfNum[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> WolfNo;
+              RedWeapon1[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> weapon1;
+              RedWeapon1Force[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> Weapon1Force;
+              RedWeapon2[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> weapon2;
+              RedWeapon2Force[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> Weapon2Force; 
+              CurCityWarriorNum[pWolf[i5] -> CurCityNum-2]--; 
+              CurCityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+              CityWarriorNum[pWolf[i5] -> CurCityNum-2]--; 
+              CityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+//              return 1;
+          } 
+    }
+    for(int i=0;i<N;i++)cout<<"Red city has "<<CityWarriorNum[i]<<" warriors!!"<<endl;
+    return tmp;
+}
+int Headquarter::BlueForward(){
+	int tmp = 1;
+    for(int i1=0;i1<totalDragonNum;i1++){
+          if(pDragon[i1] -> CurCityNum <= 1){       
+              cout<<"Red quarter has been taken!!"<<endl;
+              if(pDragon[i1] -> CurCityNum == 1){
+                             pDragon[i1] -> CurCityNum --;
+                             CurCityWarriorNum[pDragon[i1] -> CurCityNum]--; 
+                             CurCityWarriorNum[pDragon[i1] -> CurCityNum-1]++; 
+                             CityWarriorNum[pDragon[i1] -> CurCityNum]--; 
+                             CityWarriorNum[pDragon[i1] -> CurCityNum-1]++;
+              } 
+              EnermyNum ++; 
+              tmp = 0; 
+          }
+          else{   
+//              pCity[n1] -> BlueUpgrade(pDragon[i1] -> no,pDragon[i1] -> kindNo,1,0,0,0,0);     
+              pDragon[i1] -> CurCityNum --; 
+              cout<<"Blue Dragon forward to city "<<pDragon[i1] -> CurCityNum<<endl;  
+              BlueWarriorNo[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> no;
+              BlueWarriorKindNo[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> kindNo; 
+              BlueWarriorLifeValue[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> LifeValue;
+              BlueWarriorForce[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> WarriorForce; 
+              BlueDragonNum[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> DragonNo;
+              BlueNinjaNum[pDragon[i1] -> CurCityNum-1] = 0;
+              BlueIcemanNum[pDragon[i1] -> CurCityNum-1] = 0;
+              BlueLionNum[pDragon[i1] -> CurCityNum-1] = 0;
+              BlueWolfNum[pDragon[i1] -> CurCityNum-1] = 0; 
+              BlueWeapon1[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> weapon1;
+              BlueWeapon1Force[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> Weapon1Force;
+              BlueWeapon2[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> weapon2;
+              BlueWeapon2Force[pDragon[i1] -> CurCityNum-1] = pDragon[i1] -> Weapon2Force;
+              CurCityWarriorNum[pDragon[i1] -> CurCityNum]--; 
+              CurCityWarriorNum[pDragon[i1] -> CurCityNum-1]++; 
+              CityWarriorNum[pDragon[i1] -> CurCityNum]--; 
+              CityWarriorNum[pDragon[i1] -> CurCityNum-1]++;
+//              return 1; 
+          } 
+    } 
+    for(int i2=0;i2<totalNinjaNum;i2++){
+          if(pNinja[i2] -> CurCityNum <= 1){        
+              cout<<"Red quarter has been taken!!"<<endl; 
+              if(pNinja[i2] -> CurCityNum == 1){
+                            pNinja[i2] -> CurCityNum --;
+                            CurCityWarriorNum[pNinja[i2] -> CurCityNum]--; 
+                            CurCityWarriorNum[pNinja[i2] -> CurCityNum-1]++; 
+                            CityWarriorNum[pNinja[i2] -> CurCityNum]--; 
+                            CityWarriorNum[pNinja[i2] -> CurCityNum-1]++;  
+              }
+              EnermyNum ++; 
+              tmp = 0;
+          }     
+          else{ 
+//              pCity[pNinja[i2] -> CurCityNum] -> BlueUpgrade(pNinja[i2] -> no,pNinja[i2] -> kindNo,0,1,0,0,0);   
+              pNinja[i2] -> CurCityNum --;
+              cout<<"Blue Ninja forward to city "<<pNinja[i2] -> CurCityNum<<endl;  
+              BlueWarriorNo[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> no;
+              BlueWarriorKindNo[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> kindNo; 
+              BlueWarriorLifeValue[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> LifeValue; 
+              BlueWarriorForce[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> WarriorForce; 
+              BlueDragonNum[pNinja[i2] -> CurCityNum-1] = 0;
+              BlueNinjaNum[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> NinjaNo;
+              BlueIcemanNum[pNinja[i2] -> CurCityNum-1] = 0;
+              BlueLionNum[pNinja[i2] -> CurCityNum-1] = 0;
+              BlueWolfNum[pNinja[i2] -> CurCityNum-1] = 0;
+              BlueWeapon1[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> weapon1;
+              BlueWeapon1Force[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> Weapon1Force;
+              BlueWeapon2[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> weapon2;
+              BlueWeapon2Force[pNinja[i2] -> CurCityNum-1] = pNinja[i2] -> Weapon2Force;
+              CurCityWarriorNum[pNinja[i2] -> CurCityNum]--; 
+              CurCityWarriorNum[pNinja[i2] -> CurCityNum-1]++;     
+              CityWarriorNum[pNinja[i2] -> CurCityNum]--; 
+              CityWarriorNum[pNinja[i2] -> CurCityNum-1]++;  
+//              return 1;  
+          } 
+    }
+    for(int i3=0;i3<totalIcemanNum;i3++){
+          if(pIceman[i3] -> CurCityNum <= 1){     
+              cout<<"Red quarter has been taken!!"<<endl; 
+              if(pIceman[i3] -> CurCityNum == 1){
+                             pIceman[i3] -> CurCityNum --;
+                             CurCityWarriorNum[pIceman[i3] -> CurCityNum]--; 
+                             CurCityWarriorNum[pIceman[i3] -> CurCityNum-1]++; 
+                             CityWarriorNum[pIceman[i3] -> CurCityNum]--; 
+                             CityWarriorNum[pIceman[i3] -> CurCityNum-1]++;  
+              }
+              EnermyNum ++;  
+              tmp = 0;
+          }     
+          else{ 
+//              pCity[pIceman[i3] -> CurCityNum] -> BlueUpgrade(pIceman[i3] -> no,pIceman[i3] -> kindNo,0,0,1,0,0);
+              pIceman[i3] -> CurCityNum --;
+              pIceman[i3] -> step ++; 
+              pIceman[i3] -> LifeDropForceUp(pIceman[i3] -> step);
+              cout<<"Blue Iceman forward to city "<<pIceman[i3] -> CurCityNum<<endl;
+              BlueWarriorNo[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> no;
+              BlueWarriorKindNo[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> kindNo; 
+              BlueWarriorLifeValue[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> LifeValue;
+              BlueWarriorForce[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> WarriorForce;   
+              BlueDragonNum[pIceman[i3] -> CurCityNum-1] = 0;
+              BlueNinjaNum[pIceman[i3] -> CurCityNum-1] = 0;
+              BlueIcemanNum[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> IcemanNo;
+              BlueLionNum[pIceman[i3] -> CurCityNum-1] = 0;
+              BlueWolfNum[pIceman[i3] -> CurCityNum-1] = 0;
+              BlueWeapon1[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> weapon1;
+              BlueWeapon1Force[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> Weapon1Force;
+              BlueWeapon2[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> weapon2;
+              BlueWeapon2Force[pIceman[i3] -> CurCityNum-1] = pIceman[i3] -> Weapon2Force;
+              CurCityWarriorNum[pIceman[i3] -> CurCityNum]--; 
+              CurCityWarriorNum[pIceman[i3] -> CurCityNum-1]++; 
+              CityWarriorNum[pIceman[i3] -> CurCityNum]--; 
+              CityWarriorNum[pIceman[i3] -> CurCityNum-1]++;  
+//              return 1; 
+          } 
+    }
+    for(int i4=0;i4<totalLionNum;i4++){
+          if(pLion[i4] -> CurCityNum <= 1){      
+              cout<<"Red quarter has been taken!!"<<endl;
+              if(pLion[i4] -> CurCityNum == 1){
+                           pLion[i4] -> CurCityNum --;
+                           CurCityWarriorNum[pLion[i4] -> CurCityNum]--; 
+                           CurCityWarriorNum[pLion[i4] -> CurCityNum-1]++;  
+                           CityWarriorNum[pLion[i4] -> CurCityNum]--; 
+                           CityWarriorNum[pLion[i4] -> CurCityNum-1]++;
+              } 
+              EnermyNum ++; 
+              tmp = 0; 
+          }
+          else{     
+//              pCity[pLion[i4] -> CurCityNum] -> BlueUpgrade(pLion[i4] -> no,pLion[i4] -> kindNo,0,0,0,1,0);      
+              pLion[i4] -> CurCityNum --; 
+              cout<<"Blue Lion forward to city "<<pLion[i4] -> CurCityNum<<endl; 
+              BlueWarriorNo[pLion[i4] -> CurCityNum-1] = pLion[i4] -> no;
+              BlueWarriorKindNo[pLion[i4] -> CurCityNum-1] = pLion[i4] -> kindNo; 
+              BlueWarriorLifeValue[pLion[i4] -> CurCityNum-1] = pLion[i4] -> LifeValue;
+              BlueWarriorForce[pLion[i4] -> CurCityNum-1] = pLion[i4] -> WarriorForce;   
+              BlueDragonNum[pLion[i4] -> CurCityNum-1] = 0;
+              BlueNinjaNum[pLion[i4] -> CurCityNum-1] = 0;
+              BlueIcemanNum[pLion[i4] -> CurCityNum-1] = 0;
+              BlueLionNum[pLion[i4] -> CurCityNum-1] = pLion[i4] -> LionNo;
+              BlueWolfNum[pLion[i4] -> CurCityNum-1] = 0;
+              BlueWeapon1[pLion[i4] -> CurCityNum-1] = pLion[i4] -> weapon1;
+              BlueWeapon1Force[pLion[i4] -> CurCityNum-1] = pLion[i4] -> Weapon1Force;
+              BlueWeapon2[pLion[i4] -> CurCityNum-1] = pLion[i4] -> weapon2;
+              BlueWeapon2Force[pLion[i4] -> CurCityNum-1] = pLion[i4] -> Weapon2Force;
+              CurCityWarriorNum[pLion[i4] -> CurCityNum]--; 
+              CurCityWarriorNum[pLion[i4] -> CurCityNum-1]++;  
+              CityWarriorNum[pLion[i4] -> CurCityNum]--; 
+              CityWarriorNum[pLion[i4] -> CurCityNum-1]++;
+//              return 1;  
+          }  
+    }
+    for(int i5=0;i5<totalWolfNum;i5++){
+          if(pWolf[i5] -> CurCityNum <= 1){      
+              cout<<"Red  quarter has been taken!!"<<endl; 
+              if(pWolf[i5] -> CurCityNum == 1){
+                           pWolf[i5] -> CurCityNum --;
+                           CurCityWarriorNum[pWolf[i5] -> CurCityNum]--; 
+                           CurCityWarriorNum[pWolf[i5] -> CurCityNum-1]++; 
+                           CityWarriorNum[pWolf[i5] -> CurCityNum]--; 
+                           CityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+              }
+              EnermyNum ++; 
+              tmp = 0;  
+          }
+          else{
+//              pCity[pWolf[i5] -> CurCityNum] -> BlueUpgrade(pWolf[i5] -> no,pWolf[i5] -> kindNo,0,0,0,0,1);     
+              pWolf[i5] -> CurCityNum --; 
+              cout<<"Blue Wolf forward to city "<<pWolf[i5] -> CurCityNum<<endl; 
+              BlueWarriorNo[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> no;
+              BlueWarriorKindNo[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> kindNo; 
+              BlueWarriorLifeValue[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> LifeValue; 
+              BlueWarriorForce[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> WarriorForce;
+              BlueDragonNum[pWolf[i5] -> CurCityNum-1] = 0;
+              BlueNinjaNum[pWolf[i5] -> CurCityNum-1] = 0;
+              BlueIcemanNum[pWolf[i5] -> CurCityNum-1] = 0;
+              BlueLionNum[pWolf[i5] -> CurCityNum-1] = 0;
+              BlueWolfNum[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> WolfNo;
+              BlueWeapon1[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> weapon1;
+              BlueWeapon1Force[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> Weapon1Force;
+              BlueWeapon2[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> weapon2;
+              BlueWeapon2Force[pWolf[i5] -> CurCityNum-1] = pWolf[i5] -> Weapon2Force;
+              CurCityWarriorNum[pWolf[i5] -> CurCityNum]--; 
+              CurCityWarriorNum[pWolf[i5] -> CurCityNum-1]++; 
+              CityWarriorNum[pWolf[i5] -> CurCityNum]--; 
+              CityWarriorNum[pWolf[i5] -> CurCityNum-1]++;
+//              return 1;
+          }  
+    }
+    return tmp;
+} 
+void Headquarter::CityInit(City  * c){
+     pCity[totalCityNum] = c; 
+     totalCityNum ++;
+     cout<<"City "<<totalCityNum<<" has been made!"<<endl;
+}
+void Headquarter::GetLifeValue(int n/*城市編號-1*/){
+     totalLifeValue += CurCityLifeValue[n];
+     cout<<color<<" side gets "<<CurCityLifeValue[n]<<" life value!!"<<endl;
+     CurCityLifeValue[n] = 0; 
+}
+bool Headquarter::occupied(){
+        if(EnermyNum >=2){return true;}
+        else
+        {return false;}
+}
+Headquarter::~Headquarter () {
+	//for( int i = 0;i < totalWarriorNum;i ++ )
+		//delete pWarriors[i];
+/*for( int i2 = 0;i2 < totalDragonNum;i2 ++ )
+		delete pDragon[i2];
+for( int i3 = 0;i3 < totalIcemanNum;i3 ++ )
+		delete pIceman[i3];
+           for( int i4 = 0;i4 < totalNinjaNum;i4 ++ )
+		delete pNinja[i4];
+           for( int i5 = 0;i5 < totalLionNum;i5 ++ )
+		delete pLion[i5];
+           for( int i6 = 0;i6 < totalWolfNum;i6 ++ )
+		delete pWolf[i6];*/ 
+}//new一定要搭配delete
+int Headquarter::Produce(int nTime,int R)
+{
+    int F;//武士攻擊力 
+	if( stopped )
+		return 0;
+	int searchingTimes = 0;
+	while( Warrior::initialLifeValue[makingSeq[color][curMakingSeqIdx]] > totalLifeValue &&
+		searchingTimes < WARRIOR_NUM ) {
+		curMakingSeqIdx = ( curMakingSeqIdx + 1 ) % WARRIOR_NUM ;
+		searchingTimes ++;
+	}
+	int kindNo = makingSeq[color][curMakingSeqIdx];
+	if( Warrior::initialLifeValue[kindNo] > totalLifeValue ) {
+		stopped = true;
+		if( color == 0)
+			printf("%03d red headquarter stops making warriors\n",nTime);
+		else
+			printf("%03d blue headquarter stops making warriors\n",nTime);
+		return 0;
+	}
+	totalLifeValue -= Warrior::initialLifeValue[kindNo];
+	F = Warrior::force[kindNo]; 
+	curMakingSeqIdx = ( curMakingSeqIdx + 1 ) % WARRIOR_NUM ; 
+	warriorNum[kindNo]++;
+	if(color == 0 && kindNo == 2){pIceman[totalIcemanNum] = new Iceman( this,totalWarriorNum+1,kindNo,color,totalCityNum);pIceman[totalIcemanNum] -> Iceman::PrintResult(nTime,F,R);totalIcemanNum ++;pIceman[totalIcemanNum-1] -> IcemanNo = totalIcemanNum;cout<<"This iceman has iceman no : "<<pIceman[totalIcemanNum-1] -> IcemanNo<<endl;} 
+    else if(color == 0 && kindNo == 3){pLion[totalLionNum] = new Lion( this,totalWarriorNum+1,kindNo,color,totalCityNum);pLion[totalLionNum] -> loyalty = this -> totalLifeValue;pLion[totalLionNum] -> Lion::PrintResult(nTime,F,R);totalLionNum ++;pLion[totalLionNum-1] -> LionNo = totalLionNum;cout<<"This lion has lion no : "<<pLion[totalLionNum-1] -> LionNo<<endl;}
+	else if(color == 0 && kindNo == 4){pWolf[totalWolfNum] = new Wolf( this,totalWarriorNum+1,kindNo,color,totalCityNum);pWolf[totalWolfNum] -> Wolf::PrintResult(nTime,F,R);totalWolfNum ++;pWolf[totalWolfNum-1] -> WolfNo = totalWolfNum;cout<<"This wolf has wolf no : "<<pWolf[totalWolfNum-1] -> WolfNo<<endl;}
+    else if(color == 0 && kindNo == 1){pNinja[totalNinjaNum] = new Ninja( this,totalWarriorNum+1,kindNo,color,totalCityNum);pNinja[totalNinjaNum] -> Ninja::PrintResult(nTime,F,R);totalNinjaNum ++;pNinja[totalNinjaNum-1] -> NinjaNo = totalNinjaNum;cout<<"This ninja has ninja no : "<<pNinja[totalNinjaNum-1] -> NinjaNo<<endl;}
+    else if(color == 0 && kindNo == 0){pDragon[totalDragonNum] = new Dragon( this,totalWarriorNum+1,kindNo,color,totalCityNum);pDragon[totalDragonNum] -> morale = (float)this -> totalLifeValue / Warrior::initialLifeValue[kindNo];pDragon[totalDragonNum] -> Dragon::PrintResult(nTime,F,R);totalDragonNum ++;pDragon[totalDragonNum-1] ->DragonNo = totalDragonNum;cout<<"This dragon has dragon no : "<<pDragon[totalDragonNum-1] ->DragonNo<<endl;}
+    else if(color == 1 && kindNo == 2){pIceman[totalIcemanNum] = new Iceman( this,totalWarriorNum+1,kindNo,color,totalCityNum);pIceman[totalIcemanNum] -> Iceman::PrintResult(nTime,F,R);totalIcemanNum ++;pIceman[totalIcemanNum-1] -> IcemanNo = totalIcemanNum;cout<<"This iceman has iceman no : "<<pIceman[totalIcemanNum-1] -> IcemanNo<<endl;}
+    else if(color == 1 && kindNo == 3){pLion[totalLionNum] = new Lion( this,totalWarriorNum+1,kindNo,color,totalCityNum);pLion[totalLionNum] -> loyalty = this -> totalLifeValue;pLion[totalLionNum] -> Lion::PrintResult(nTime,F,R);totalLionNum ++;pLion[totalLionNum-1] -> LionNo = totalLionNum;cout<<"This lion has lion no : "<<pLion[totalLionNum-1] -> LionNo<<endl;}
+    else if(color == 1 && kindNo == 4){pWolf[totalWolfNum] = new Wolf( this,totalWarriorNum+1,kindNo,color,totalCityNum);pWolf[totalWolfNum] -> Wolf::PrintResult(nTime,F,R);totalWolfNum ++;pWolf[totalWolfNum-1] -> WolfNo = totalWolfNum;cout<<"This wolf has wolf no : "<<pWolf[totalWolfNum-1] -> WolfNo<<endl;}
+    else if(color == 1 && kindNo == 1){pNinja[totalNinjaNum] = new Ninja( this,totalWarriorNum+1,kindNo,color,totalCityNum);pNinja[totalNinjaNum] -> Ninja::PrintResult(nTime,F,R);totalNinjaNum ++;pNinja[totalNinjaNum-1] -> NinjaNo = totalNinjaNum;cout<<"This ninja has ninja no : "<<pNinja[totalNinjaNum-1] -> NinjaNo<<endl;}
+    else if(color == 1 && kindNo == 0){pDragon[totalDragonNum] = new Dragon( this,totalWarriorNum+1,kindNo,color,totalCityNum);pDragon[totalDragonNum] ->morale = (float)this -> totalLifeValue / Warrior::initialLifeValue[kindNo]; pDragon[totalDragonNum] -> Dragon::PrintResult(nTime,F,R);totalDragonNum ++;pDragon[totalDragonNum-1] ->DragonNo = totalDragonNum;cout<<"This dragon has dragon no : "<<pDragon[totalDragonNum-1] ->DragonNo<<endl;}
+    else {}
+//	pWarriors[totalWarriorNum] = new Warrior(this,totalWarriorNum+1,kindNo);
+//	pWarriors[totalWarriorNum] -> SetInfo( this,totalWarriorNum+1,kindNo); 
+//	pWarriors[totalWarriorNum]->PrintResult(nTime);
+	totalWarriorNum ++;
+	return 1;
+}
+string Headquarter::GetColor()
+{
+	if( color == 0)
+		return "red";
+	else
+		return "blue";
+}
+ 
+string Warrior::names[WARRIOR_NUM] = { "dragon","ninja","iceman","lion","wolf" };
+int Warrior::initialLifeValue [WARRIOR_NUM];
+int Warrior::force [WARRIOR_NUM];
+int Headquarter::makingSeq[2][WARRIOR_NUM] = { { 2,3,4,1,0 },{3,0,1,2,4} }; 
+ 
+int main()
+{
+	int t;
+	int m;
+    int N;//城市數
+    int R;//箭攻擊力 
+    int K;//忠誠度降低值 
+    int T;//結束時間 
+    int RedEnermyNum = 0;//敵人到達陣營數 
+    int BlueEnermyNum = 0;
+//        cin>>N; 
+	City cities[N];
+	for(int j = 1;j <= N;j ++){
+            cities[j].Init(j-1,j);
+            cout<<cities[j].GetFlag()<<endl; 
+        } 
+	Headquarter RedHead,BlueHead;
+	scanf("%d",&t);
+	int nCaseNo = 1;
+	while ( t -- ) {
+		printf("Case:%d\n",nCaseNo++);
+		scanf("%d",&m);
+		scanf("%d",&N);
+		scanf("%d",&R);
+		scanf("%d",&K);
+		scanf("%d",&T);
+		for( int i = 0;i < WARRIOR_NUM;i ++ )
+			scanf("%d", & Warrior::initialLifeValue[i]);
+		for( int i = 0;i < WARRIOR_NUM;i ++ )
+			scanf("%d", & Warrior::force[i]);
+		RedHead.Init(0,m,N);
+		BlueHead.Init(1,m,N);
+		RedHead.totalCityNum = 0;
+		BlueHead.totalCityNum = 0;
+        for(int n = 0;n < N;n ++){
+               RedHead.CityInit(&cities[n]); 
+               BlueHead.CityInit(&cities[n]);
+        }
+		int nTime = 0;
+		update();
+		while( true) {    
+/*****************************00 武士降生*******************************/ 
+              RedHead.Produce(nTime,R);
+		      BlueHead.Produce(nTime,R);
+		      if(nTime*60 == T) break;
+/*****************************05 Lion逃跑*******************************/
+		      if(nTime*60+5 == T) break;
+/*****************************10 武士前進*******************************/
+			  int tmp3 = RedHead.RedForward(N); 
+			  if( tmp3 == 0){
+                    RedEnermyNum ++; 
+                    if(RedEnermyNum == 2)
+                          break;//使這個case結束 
+              } 
+			  int tmp4 = BlueHead.BlueForward(); 
+//			  for(int j1 = 0;j1 < RedHead.totalWarriorNum;j1++){RedHead.pWarriors[j1]->Forward();}//紅武士前進 
+//                          for(int j2 = 0;j2 < BlueHead.totalWarriorNum;j2++){BlueHead.pWarriors[j2]->Forward();}//藍武士前進
+              if( tmp3 == 0 || tmp4 == 0){
+                    BlueEnermyNum ++;
+                    if(BlueEnermyNum == 2)
+                          break;//使這個case結束  
+              }
+/*****************************10 城市資訊更新*******************************/ 
+              for(int i1=0;i1<N;i1++){
+                    cout<<"RedHq 目前武士資訊(編號、生命值、種類、種類內編號、武器編號、武器攻擊力、武士攻擊力): "<<RedWarriorNo[i1]<<" ";
+                    cout<<RedWarriorKindNo[i1]<<" "<<RedWarriorLifeValue[i1]<<" "<<RedDragonNum[i1]<<" ";
+                    cout<<RedNinjaNum[i1]<<" "<<RedIcemanNum[i1]<<" ";
+                    cout<<RedLionNum[i1]<<" "<<RedWolfNum[i1]<<" "<<RedWeapon1[i1]<<" "<<RedWeapon1Force[i1]; 
+                    cout<<" "<<RedWarriorForce[i1]<<endl;
+                    cout<<"城市 "<<i1+1<<"目前有"<<CurCityWarriorNum[i1]<<"人"<<endl; 
+              } 
+              for(int i2=0;i2<N;i2++){
+                    cout<<"BlueHq 目前武士資訊(編號、生命值、種類、種類內編號、武器編號、武器攻擊力、武士攻擊力): "<<BlueWarriorNo[i2]<<" ";
+                    cout<<BlueWarriorKindNo[i2]<<" "<<BlueWarriorLifeValue[i2]<<" "<<BlueDragonNum[i2]<<" ";
+                    cout<<BlueNinjaNum[i2]<<" "<<BlueIcemanNum[i2]<<" ";
+                    cout<<BlueLionNum[i2]<<" "<<BlueWolfNum[i2]<<" "<<BlueWeapon1[i2]<<" "<<BlueWeapon1Force[i2];
+                    cout<<" "<<BlueWarriorForce[i2]<<endl;
+                    cout<<"城市 "<<i2+1<<"目前有"<<CurCityWarriorNum[i2]<<"人"<<endl; 
+              }
+              if(nTime*60+10 == T) break;
+/*****************************20 城市產生生命元*******************************/
+              for(int j1 = 0;j1 < N;j1 ++){
+                    CurCityLifeValue[j1] += 10; 
+                    cout<<"City "<<j1+1<<" has up to "<<CurCityLifeValue[j1]<<" life value!!"<<endl;  
+              }
+              if(nTime*60+20 == T) break;
+/*****************************30 武士取走生命元*******************************/
+              for(int i=0;i<N;i++)cout<<"藍武士在城市"<<i<<"有"<<BlueHead.CityWarriorNum[i]<<"人"<<endl; 
+              for(int j2 = 0;j2 < N;j2 ++){
+                    if(RedHead.CityWarriorNum[j2] == 1 && BlueHead.CityWarriorNum[j2] == 0){
+                          RedHead.GetLifeValue(j2);
+                    } 
+                    if(RedHead.CityWarriorNum[j2] == 0 && BlueHead.CityWarriorNum[j2] == 1){
+                          BlueHead.GetLifeValue(j2);//因為blue是從後面城市前進 
+                    } 
+              }
+              cout<<"Red side has "<<RedHead.totalLifeValue<<" life value!!"<<endl;
+              cout<<"Blue side has "<<BlueHead.totalLifeValue<<" life value!!"<<endl; 
+              if(nTime*60+30 == T) break;
+/*****************************35 武士放箭*******************************/
+//一、找出有箭的武士,返回城市值 
+//二、找出下個城市有敵人的武士
+//三、返回攻擊者種類和編號 
+//四、輸入攻擊&被攻擊者指針近shoot(會調用attack函數)函數裡 (用兩個if()) 
+              if(nTime*60+35 == T) break;
+/*****************************38 武士自爆*******************************/
+//一、找出有炸彈武士,返回城市值 
+//二、返回其城市兩武士種類、編號
+//三、輸入攻擊&被攻擊者指針進入explode函數裡 
+              if(nTime*60+38 == T) break;
+/*****************************40 武士開戰*******************************/
+//一、找出有兩武士城市 
+//二、返回其城市兩武士種類、編號、武器種類
+//三、使用fight()函數
+//四、調用WeaponForceChange()函數紀錄武器損耗 
+//五、分配生命元獎勵
+//六、更換城市旗幟 
+              if(nTime*60+40 == T) break;
+/*****************************50 司令部報告生命元數量*******************************/
+              if(nTime*60+50 == T) break;
+/*****************************55 武士報告武器狀況*******************************/
+              if(nTime*60+55 == T) break;
+/*****************************城市資訊初始化*******************************/ 
+//              update();
+              cout<<endl; 
+              nTime ++;   
+        } 
+	}
+	return 0;
+}
+//Lion還要再看看

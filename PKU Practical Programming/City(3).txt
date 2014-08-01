@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+
+class City
+{
+       public:
+                int num; //城市編號
+                int CurWarrior; //目前武士數量(每小時40分)
+                void CreateCityNum(); //製造city編號
+                char flag; //旗幟顏色
+                void ChangeFlag(); //更換旗幟
+                bool StartFight(); //判斷戰鬥是否開始(每小時40分)
+                bool continuous(); //判斷戰鬥是否連續
+                void LifeProduce(); //城市產出10生命元(每小時20分)
+};
+
+int main() 
+{
+
+	return 0;
+}

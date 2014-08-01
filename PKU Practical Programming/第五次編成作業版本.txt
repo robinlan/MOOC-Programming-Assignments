@@ -1,0 +1,263 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+using namespace std;
+const int  WARRIOR_NUM = 5;
+ 
+class Headquarter;
+class Warrior
+{
+public:
+		Headquarter * pHeadquarter;
+		int kindNo;
+		int no;
+		static string names[WARRIOR_NUM];
+		static int initialLifeValue [WARRIOR_NUM];
+		Warrior(Headquarter * p,int no_,int kindNo_);
+		virtual void PrintResult(int nTime);
+		int weapon1;
+        int weapon2; 
+};
+class Dragon:public Warrior
+{
+public:
+        float morale;//士氣                 
+        Dragon(Headquarter * p,int no_,int kindNo_):Warrior(p,no_,kindNo_){
+                           weapon1 = no%3; 
+        }
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else {}  
+        } 
+        void PrintResult(int nTime){
+             Warrior::PrintResult(nTime);
+             cout<<"It has a "<<GetWeapName(weapon1);printf(",and it's morale is %.2f\n",morale); 
+        }
+};
+class Ninja:public Warrior
+{
+	public:
+        Ninja(Headquarter * p,int no_,int kindNo_):Warrior(p,no_,kindNo_){
+                          weapon1 = no%3; 
+                          weapon2 = (no+1)%3; 
+        } 
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else {}  
+        } 
+        void PrintResult(int nTime){
+             Warrior::PrintResult(nTime);
+             cout<<"It has a "<<GetWeapName(weapon1)<<" and a "<<GetWeapName(weapon2)<<endl; 
+        }
+};
+class Iceman:public Warrior
+{
+	public:
+        Iceman(Headquarter * p,int no_,int kindNo_):Warrior(p,no_,kindNo_){
+                           weapon1 = no%3;
+        }
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else {}  
+        } 
+        void PrintResult(int nTime){
+             Warrior::PrintResult(nTime);
+             cout<<"It has a "<<GetWeapName(weapon1)<<endl; 
+        }
+};
+class Lion:public Warrior
+{
+	public:
+        float loyalty;//忠誠度 
+        Lion(Headquarter * p,int no_,int kindNo_):Warrior(p,no_,kindNo_){
+        }
+        void PrintResult(int nTime){
+             Warrior::PrintResult(nTime);
+             printf("It's loyalty is %.0f\n",loyalty); 
+        }
+};
+class Wolf:public Warrior
+{
+	public:
+        Wolf(Headquarter * p,int no_,int kindNo_):Warrior(p,no_,kindNo_){}
+        string GetWeapName(int weapon){
+               if(weapon == 0){
+                         return "sword"; 
+               }
+               else if(weapon == 1){
+                         return "bomb"; 
+               }
+               else if(weapon == 2){
+                         return "arrow"; 
+               } 
+               else {}  
+        } 
+        void PrintResult(int nTime){Warrior::PrintResult(nTime);}
+};
+class Headquarter
+{
+	private:
+		int totalLifeValue;
+		bool stopped;
+		int totalWarriorNum;
+        int totalDragonNum; 
+		int totalNinjaNum; 
+		int totalIcemanNum; 
+		int totalLionNum; 
+		int totalWolfNum;
+		int color;
+		int curMakingSeqIdx; 
+		int warriorNum[WARRIOR_NUM]; 
+		Warrior * pWarriors[1000];
+        Dragon * pDragon[100];
+        Iceman * pIceman[100];
+        Ninja * pNinja[100];
+        Lion * pLion[100];
+        Wolf * pWolf[100];
+	public:
+		friend class Warrior;
+		friend class Dragon;
+		friend class Iceman;
+		friend class Lion;
+		friend class Wolf;
+		friend class Ninja;
+		static int makingSeq[2][WARRIOR_NUM]; 
+		void Init(int color_, int lv);
+		~Headquarter () ;
+		int Produce(int nTime);
+		string GetColor();
+ 
+};
+Warrior::Warrior( Headquarter * p,int no_,int kindNo_ ) {
+	no = no_;
+	kindNo = kindNo_;
+	pHeadquarter = p;
+}
+void Warrior::PrintResult(int nTime)
+{
+		string color =  pHeadquarter->GetColor();
+		printf("%03d %s %s %d born with strength %d,%d %s in %s headquarter\n"	,
+				nTime, color.c_str(), names[kindNo].c_str(), no, initialLifeValue[kindNo],
+				pHeadquarter->warriorNum[kindNo],names[kindNo].c_str(),color.c_str());
+}
+void Headquarter::Init(int color_, int lv)
+{
+	color = color_;
+	totalLifeValue = lv;
+	totalWarriorNum = 0;
+	stopped = false;
+	curMakingSeqIdx = 0;
+	for( int i = 0;i < WARRIOR_NUM;i ++ )
+		warriorNum[i] = 0;
+}
+Headquarter::~Headquarter () {
+for( int i2 = 0;i2 < totalDragonNum;i2 ++ )
+		delete pDragon[i2];
+for( int i3 = 0;i3 < totalIcemanNum;i3 ++ )
+		delete pIceman[i3];
+           for( int i4 = 0;i4 < totalNinjaNum;i4 ++ )
+		delete pNinja[i4];
+           for( int i5 = 0;i5 < totalLionNum;i5 ++ )
+		delete pLion[i5];
+           for( int i6 = 0;i6 < totalWolfNum;i6 ++ )
+		delete pWolf[i6];
+}//new一定要搭配delete
+int Headquarter::Produce(int nTime)
+{
+ 
+	if( stopped )
+		return 0;
+	int searchingTimes = 0;
+	while( Warrior::initialLifeValue[makingSeq[color][curMakingSeqIdx]] > totalLifeValue &&
+		searchingTimes < WARRIOR_NUM ) {
+		curMakingSeqIdx = ( curMakingSeqIdx + 1 ) % WARRIOR_NUM ;
+		searchingTimes ++;
+	}
+	int kindNo = makingSeq[color][curMakingSeqIdx];
+	if( Warrior::initialLifeValue[kindNo] > totalLifeValue ) {
+		stopped = true;
+		if( color == 0)
+			printf("%03d red headquarter stops making warriors\n",nTime);
+		else
+			printf("%03d blue headquarter stops making warriors\n",nTime);
+		return 0;
+	}
+	totalLifeValue -= Warrior::initialLifeValue[kindNo];
+	curMakingSeqIdx = ( curMakingSeqIdx + 1 ) % WARRIOR_NUM ;
+	warriorNum[kindNo]++;
+	if(color == 0 && kindNo == 2){pIceman[totalIcemanNum] = new Iceman( this,totalWarriorNum+1,kindNo);pIceman[totalIcemanNum] -> Iceman::PrintResult(nTime);totalIcemanNum ++;} 
+    else if(color == 0 && kindNo == 3){pLion[totalLionNum] = new Lion( this,totalWarriorNum+1,kindNo);pLion[totalLionNum] -> loyalty = this -> totalLifeValue;pLion[totalLionNum] -> Lion::PrintResult(nTime);totalLionNum ++;}
+	else if(color == 0 && kindNo == 4){pWolf[totalWolfNum] = new Wolf( this,totalWarriorNum+1,kindNo);pWolf[totalWolfNum] -> Wolf::PrintResult(nTime);totalWolfNum ++;}
+    else if(color == 0 && kindNo == 1){pNinja[totalNinjaNum] = new Ninja( this,totalWarriorNum+1,kindNo);pNinja[totalNinjaNum] -> Ninja::PrintResult(nTime);totalNinjaNum ++;}
+    else if(color == 0 && kindNo == 0){pDragon[totalDragonNum] = new Dragon( this,totalWarriorNum+1,kindNo);pDragon[totalDragonNum] -> morale = (float)this -> totalLifeValue / Warrior::initialLifeValue[kindNo];pDragon[totalDragonNum] -> Dragon::PrintResult(nTime);totalDragonNum ++;}
+    else if(color == 1 && kindNo == 2){pIceman[totalIcemanNum] = new Iceman( this,totalWarriorNum+1,kindNo);pIceman[totalIcemanNum] -> Iceman::PrintResult(nTime);totalIcemanNum ++;}
+    else if(color == 1 && kindNo == 3){pLion[totalLionNum] = new Lion( this,totalWarriorNum+1,kindNo);pLion[totalLionNum] -> loyalty = this -> totalLifeValue;pLion[totalLionNum] -> Lion::PrintResult(nTime);totalLionNum ++;}
+    else if(color == 1 && kindNo == 4){pWolf[totalWolfNum] = new Wolf( this,totalWarriorNum+1,kindNo);pWolf[totalWolfNum] -> Wolf::PrintResult(nTime);totalWolfNum ++;}
+    else if(color == 1 && kindNo == 1){pNinja[totalNinjaNum] = new Ninja( this,totalWarriorNum+1,kindNo);pNinja[totalNinjaNum] -> Ninja::PrintResult(nTime);totalNinjaNum ++;}
+    else if(color == 1 && kindNo == 0){pDragon[totalDragonNum] = new Dragon( this,totalWarriorNum+1,kindNo);pDragon[totalDragonNum] ->morale = (float)this -> totalLifeValue / Warrior::initialLifeValue[kindNo]; pDragon[totalDragonNum] -> Dragon::PrintResult(nTime);totalDragonNum ++;}
+    else {}
+	totalWarriorNum ++;
+	return 1;
+}
+string Headquarter::GetColor()
+{
+	if( color == 0)
+		return "red";
+	else
+		return "blue";
+}
+ 
+string Warrior::names[WARRIOR_NUM] = { "dragon","ninja","iceman","lion","wolf" };
+int Warrior::initialLifeValue [WARRIOR_NUM];
+int Headquarter::makingSeq[2][WARRIOR_NUM] = { { 2,3,4,1,0 },{3,0,1,2,4} }; 
+ 
+int main()
+{
+	int t;
+	int m;
+	Headquarter RedHead,BlueHead;
+	scanf("%d",&t);
+	int nCaseNo = 1;
+	while ( t -- ) {
+		printf("Case:%d\n",nCaseNo++);
+		scanf("%d",&m);
+		for( int i = 0;i < WARRIOR_NUM;i ++ )
+			scanf("%d", & Warrior::initialLifeValue[i]);
+		RedHead.Init(0,m);
+		BlueHead.Init(1,m);
+		int nTime = 0;
+		while( true) {
+			int tmp1 = RedHead.Produce(nTime);
+			int tmp2 = BlueHead.Produce(nTime);
+			if( tmp1 == 0 && tmp2 == 0)
+				break;//使這個case結束
+			nTime ++;
+		}
+	}
+	return 0;
+}
