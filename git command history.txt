@@ -1,0 +1,11 @@
+clone the respiritory :
+
+git clone https://github.com/robinlan/ ...... .git
+
+upload the files :
+
+git add .
+git config --global user.email "robin_lan2003@yahoo.com.tw"
+git config --global user.name "robinlan"
+git commit -m "some message"
+git push https://github.com/robinlan/ ...... .git
