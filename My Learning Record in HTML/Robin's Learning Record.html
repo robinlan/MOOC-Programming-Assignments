@@ -1,0 +1,166 @@
+<!DOCTYPE html> <!--Never forget to declare !-->
+<html>
+   <head>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	  <style>
+	     img{margin-left:auto;margin-right:auto;height:300px;width:1000px;}
+		 div#item img{height:500px;}
+		 h4{float:left;margin-top:35px;}
+		 div.pagination ul{margin-left:230px;}
+		 div.footer p{margin-left:46%;}
+		 header{margin-top:50px;}
+		 div.thumbnail img{height:150px;}
+		 div.caption p a{float:right;}
+		 div.thumbnail{border:none;}
+	  </style>
+	  <style>a.btn{width:15%;margin-left:35px;margin-top:25px;}</style>
+   </head>
+   <body>
+	  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	  <script src="js/bootstrap.min.js"></script>
+	  <div class="container">
+	     <header>
+		    <style>
+			   header h1{display:inline;}
+			   header div.navbar{display:inline;width:67%;float:right;}
+			</style>
+			<h1>Robin's MOOC</h1>
+			<div class="navbar">
+			   <div class="navbar-inner">
+                <div class="container">
+                  <ul class="nav">
+                    <li class="active"><a href="#">MOOC</a></li>
+                    <li><a href="#">Engineering Labs</a></li>
+					<li><a href="#">Medical Study</a></li>
+                    <li><a href="#">Subjective Study</a></li>
+					<li><a href="#">Others</a></li>
+                  </ul>
+                </div>
+              </div>
+			</div>
+		 </header>
+		 <hr>
+		 <div id="myCarousel" class="carousel slide" data-interval="4000" data-ride="carousel">
+            <ol class="carousel-indicators">
+               <li data-target="#myCarousel" data-slide-to="0" class="frame-one active"></li>
+               <li data-target="#myCarousel" data-slide-to="1" class="frame-two"></li>
+               <li data-target="#myCarousel" data-slide-to="2" class="frame-three"></li>
+            </ol>
+  <!-- Carousel items -->
+			<div class="carousel-inner">
+			   <div id="item" class="item active">
+			      <img src="courseraWebsite.jpg" alt=""/>
+				  <h4>Want to learn all the best courses from the most famous universities in the world ?</h4>
+				  <a href="#" class="btn btn-large btn-success">Go now !</a>
+			   </div>
+               <div id="item" class="item">
+			      <img src="edxWebsite.jpg" alt=""/>
+				  <h4>Want to learn all the best courses from the most famous universities in the world ?</h4>
+				  <a href="#" class="btn btn-large btn-success">Go now !</a>
+			   </div>
+               <div id="item" class="item">
+			      <img src="open2studyWebsite.jpg" alt=""/>
+				  <h4>Want to learn all the best courses from the most famous universities in the world ?</h4>
+				  <a href="#" class="btn btn-large btn-success">Go now !</a>
+			   </div>
+			   <div id="item" class="item">
+			      <img src="ewantWebsite.jpg" alt=""/>
+				  <h4>Want to learn all the best courses from the most famous universities in the world ?</h4>
+				  <a href="#" class="btn btn-large btn-success">Go now !</a>
+			   </div>
+            </div>
+  <!-- Carousel nav -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+         </div>
+		 <hr>
+		 <div class="row">
+		    <div class="span4">
+			   <ul class="nav nav-list">
+                  <li class="nav-header">Course Gates</li>
+                  <li class="active"><a href="#">Coursera</a></li>
+                  <li><a href="#">Edx</a></li>
+                  <li><a href="#">Big Data University</a></li>
+                  <li><a href="#">Open2Study</a></li>
+                  <li><a href="#">Ewant</a></li>
+				  <li class="nav-header">Extra Events</li>
+    			  <li><a href="#">Certificates</a></li>
+  			      <li><a href="#">Lecture Notes</a></li>
+ 			      <li><a href="#">Translating Jobs</a></li>
+ 			      <li><a href="#">Finished Assignments</a></li>
+               </ul>
+			   <h2>Related Courses</h2>
+			   <div class="row-fluid">
+			      <ul class="thumbnails">
+			         <li class="span10">
+			            <div class="thumbnail">
+			               <a href="#" class="thumbnail" onclick="displayCoursePage()"><img data-src="holder.js/300x200" src="python.png" alt=""></a>
+			               <div class="caption">
+			                  <h3>Interative Python</h3>
+			                  <p>This course is designed to help students with very little or no computing background learn the basics of building simple interactive applications.  Our language of choice, Python, is an easy-to learn, high-level computer language that is used in many of the computational courses offered on Coursera. To make learning Python easy, we have developed a new browser-based programming environment that makes developing interactive applications in Python simple. ...</p>
+							  <p><a href="#">Load more...</a></p>
+			               </div>
+			            </div>
+			         </li>
+			      </ul>
+               </div>
+			</div>
+			<div class="span8">
+			<script>
+			   var DataScientistsToolbox_bread = 'Data Scientists Toolbox';
+			   function displayCoursePage(){
+			      
+			   }
+			   function displayCourseraOngoingCourses(){
+				  
+			   }
+			</script>
+			   <ul class="breadcrumb">
+                  <li><a href="#">MOOC</a> <span class="divider">/</span></li>
+				  <li><a href="#">Coursera</a> <span class="divider">/</span></li>
+                  <li><a href="#" onclick="displayCourseraOngoingCourses()">On Going Courses</a> <span class="divider">/</span></li>
+                  <li class="active">Data Scientists Toolbox</li>
+               </ul>
+			   <div id="Course_page">
+			      <img src="DataScientistsToolbox.jpg" alt="">
+				  <h2>Course Introduction</h2>
+				  <p>In this course you will get an introduction to the main tools and ideas in the data scientist's toolbox. The course gives an overview of the data, questions, and tools that data analysts and data scientists work with. There are two components to this course. The first is a conceptual introduction to the ideas behind turning data into actionable knowledge. The second is a practical introduction to the tools that will be used in the program like version control, markdown, git, GitHub, R, and RStudio</p>
+				  <h2>Course Syllabus</h2>
+				  <p>Upon completion of this course you will be able to identify and classify data science problems. You will also have created your Github account, created your first repository, and pushed your first markdown file to your account.</p>
+				  <h2>Primary Knowlege</h2>
+				  <p>No prior backround required. Previous experience in programming is helpful.</p>
+				  <h2>Course Method</h2>
+				  <p>This course consists of weekly video lectures, weekly quizzes, and a final peer-assessed project.</p>
+			   </div>
+			   <div class="pagination">
+                  <ul>
+                     <li><a href="#">Prev</a></li>
+                     <li><a href="#" id="pag_page_1" onclick="displayPage1()">1</a></li>
+                     <li><a href="#" id="pag_page_2" onclick="displayPage2()">2</a></li>
+                     <li><a href="#">Next</a></li>
+					 <script>
+					    var DataScientistsToolbox_img = 'DataScientistsToolbox.jpg';
+						var DataScientistsToolbox_courseIntro = 'In this course you will get an introduction to the main tools and ideas in the data scientists toolbox. The course gives an overview of the data, questions, and tools that data analysts and data scientists work with. There are two components to this course. The first is a conceptual introduction to the ideas behind turning data into actionable knowledge. The second is a practical introduction to the tools that will be used in the program like version control, markdown, git, GitHub, R, and RStudio';
+						var DataScientistsToolbox_courseSyllab = 'Upon completion of this course you will be able to identify and classify data science problems. You will also have created your Github account, created your first repository, and pushed your first markdown file to your account.';
+                        var DataScientistsToolbox_coursePrimKnow = 'No prior backround required. Previous experience in programming is helpful.';
+						var DataScientistsToolbox_courseMethod = 'This course consists of weekly video lectures, weekly quizzes, and a final peer-assessed project.';
+						var DataScientistsToolbox_fq = 'How do the courses in the Data Science Specialization depend on each other?<br>We have created a handy course dependency chart to help you see how the nine courses in the specialization depend on each other.<br><br>Will I get a Statement of Accomplishment after completing this class?<br>Yes. Students who successfully complete the class will receive a Statement of Accomplishment signed by the instructor.<br><br>What resources will I need for this class?<br>For this course, all you need is an Internet connection and access to Github <br><br>How does this course fit into the Data Science Specialization?<br>This is the first course in the sequence. We recommend that you take this course before moving on to R Programming or any of the other courses in the specialization.';
+						function displayPage1() {
+                            document.getElementById("Course_page").innerHTML = '<img src="'+DataScientistsToolbox_img+'" alt=""><h2>Course Introduction</h2><p>'+DataScientistsToolbox_courseIntro+'</p><h2>Course Syllabus</h2><p>'+DataScientistsToolbox_courseSyllab+'</p><h2>Primary Knowlege</h2><p>'+DataScientistsToolbox_coursePrimKnow+'</p><h2>Course Method</h2><p>'+DataScientistsToolbox_courseMethod+'</p>';
+                        }
+						function displayPage2() {
+                            document.getElementById("Course_page").innerHTML = '<img src="'+DataScientistsToolbox_img+'" alt=""><h2>F&Q</h2><p>'+DataScientistsToolbox_fq+'</p>';
+                        }
+                     </script>
+                  </ul>
+               </div>
+			</div>
+		 </div>	
+		 <hr>
+         <div class="footer">
+            <p>&copy;Robin Lan</p>
+	     </div>
+	  </div>	 
+   </body>
+</html>
