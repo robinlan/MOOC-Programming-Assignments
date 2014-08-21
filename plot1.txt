@@ -1,0 +1,7 @@
+NEI <- readRDS("summarySCC_PM25.rds")
+s <- split(NEI, NEI$year)
+la <- lapply(s, function(x) sum(x[, c("Emissions")]))
+plot(names(la),la[1:4],type="l",xlab="year",ylab="total emissions")
+title("plot 1")
+dev.copy(png, file = "plot1.png",width = 480, height = 480, units = 'px') 
+dev.off()

@@ -1,0 +1,8 @@
+NEI <- readRDS("summarySCC_PM25.rds")
+NEIBal <- NEI[which(NEI$fips == "24510"),]
+s <- split(NEIBal, NEIBal$year)
+la <- lapply(s, function(x) sum(x[, c("Emissions")]))
+plot(names(la),la[1:4],type="l",xlab="year",ylab="Baltimore City emissions")
+title("plot 2")
+dev.copy(png, file = "plot2.png",width = 480, height = 480, units = 'px') 
+dev.off()
