@@ -1,11 +1,11 @@
 ##https://class.coursera.org/compinvesting1-003/lecture - Computational Investment Part 1 W1 Lecture024 Excel Demo in R version
 
-pd_table<-read.csv("table.csv")
+pd_table<-read.csv("C:/Users/Administrator/Downloads/table.csv")
 pd_table<-pd_table[order(pd_table$Date),]
 pd_table1<-pd_table[,c(1,7)]
 total_ret<-pd_table1[length(pd_table$Date),2]/pd_table1[1,2]
-daily_ret<-0
-for(i in 2:length(pd_table$Date))daily_ret_in_percentage<-c(daily_ret,pd_table1[i,2]-pd_table1[i-1,2])
+daily_ret_in_percentage<-0
+for(i in 2:length(pd_table$Date))daily_ret_in_percentage<-c(daily_ret_in_percentage,pd_table1[i,2]-pd_table1[i-1,2])
 pd_table1<-cbind(pd_table1,daily_ret_in_percentage)
 pd_table1$daily_ret_in_percentage<-pd_table1$daily_ret_in_percentage/pd_table1$Adj.Close
 avr_daily_ret<-mean(pd_table1$daily_ret_in_percentage)
